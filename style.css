@@ -12,10 +12,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid;
+
   margin: 3rem auto;
   border-radius: 10px;
   width: 50%;
+  background-color: lightblue;
 }
 
 h1 {
@@ -35,6 +36,11 @@ h1 {
   position: absolute;
   left: 50%;
 }
+.label-div input:hover {
+  border: 1px solid;
+  background-color: lightgray;
+  transition: 0.3s;
+}
 
 .label-div label {
   font-size: 1.3rem;
@@ -42,4 +48,21 @@ h1 {
   padding-right: 1rem;
   position: absolute;
   right: 50%;
+}
+input::placeholder {
+  position: absolute;
+  right: 30px;
+}
+button {
+  border: none;
+  padding: 10px 30px;
+  border-radius: 5px;
+  margin: 2rem 0 3rem 0;
+  font-size: 1.3rem;
+  width: 50%;
+}
+button:hover {
+  background-color: lightgray;
+  transition: 0.3s;
+  color: white;
 }
