@@ -26,13 +26,12 @@ repaymentPeriodInput.addEventListener('keydown', (e) => {
 function calculate() {
     
     const p = parseInt(loanAmountInput.value);
-    const r = parseInt(interestRateInput.value) / 1200;
+    const r = (parseInt(interestRateInput.value) / 1200).toFixed(5); // Begränsa till 5 decimaler
     const n = parseInt(repaymentPeriodInput.value) * 12;
     
-    // let decimal = (parseInt(interestRateInput.value) / 1200).toFixed(2);
+    const nominator = parseFloat(r) * (1 + parseFloat(r)) ** n; // Använd parseFloat för att konvertera till en flyttalsrepresentation
+    const denominator = (1 + parseFloat(r)) ** n - 1;
 
-    const nominator = r * (1 + r) ** n
-    const denominator = (1 + r) ** n -1
     let M = Math.round(p * (nominator / denominator))
      
     const totalInterest = p - M;
@@ -50,10 +49,10 @@ function calculate() {
 
     // kontrollerar att alla fält är ifyllda
     if (isNaN(p) ||
-        isNaN(r) || isNaN(n)) {
+        isNaN(parseFloat(r)) || isNaN(n)) {
         alert('Du måste fylla i alla fält!')
         return;        
-    } else if (p > 50) {
+    } else if (p < 50) {
         alert('Repayment period must be under 50 years!')
         return;        
     }
