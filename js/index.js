@@ -1,24 +1,51 @@
 "use strict";
-const contaiiner = document.querySelector('.container');
+const container = document.querySelector('.container');
 const loanAmountInput = document.getElementById('loan-amount');
 const interestRateInput = document.getElementById('interest-rate');
 const repaymentPeriodInput = document.getElementById('repayment-period');
 const resultBtn = document.getElementById('result-btn');
+resultBtn.addEventListener('click', () => {
+    calculate();
+    loanAmountInput.value = '';
+    interestRateInput.value = '';
+    repaymentPeriodInput.value = '';
+});
+repaymentPeriodInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        calculate();
+        loanAmountInput.value = '';
+        interestRateInput.value = '';
+        repaymentPeriodInput.value = '';
+    }
+});
 function calculate() {
     const p = parseInt(loanAmountInput.value);
     const r = parseInt(interestRateInput.value) / 1200;
     const n = parseInt(repaymentPeriodInput.value) * 12;
+    // let decimal = (parseInt(interestRateInput.value) / 1200).toFixed(2);
     const nominator = r * (1 + r) ** n;
     const denominator = (1 + r) ** n - 1;
-    const M = Math.round(p * (nominator / denominator));
+    let M = Math.round(p * (nominator / denominator));
+    const totalInterest = p - M;
     const result = document.createElement('div');
+    result.className = 'list-element';
     result.innerHTML = `
-        <p>Loan amount:$${p}</p>
+        <p>Loan amount:${p} $</p>
         <p>Interest rate: ${r}%</p>
         <p>Repayment period:${n} month</p>
-        <p>Monthly payment: ${M}$</p>
+        <p>Monthly payment: ${M} $</p>
+        <p>Total amount loan reamin: ${totalInterest} $</p>
 
     `;
-    contaiiner.appendChild(result);
+    // kontrollerar att alla fält är ifyllda
+    if (isNaN(p) ||
+        isNaN(r) || isNaN(n)) {
+        alert('Du måste fylla i alla fält!');
+        return;
+    }
+    else if (p < 50) {
+        alert('Repayment period must be under 50 years!');
+        return;
+    }
+    container.appendChild(result);
 }
-resultBtn.addEventListener('click', calculate);

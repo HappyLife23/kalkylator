@@ -66,3 +66,11 @@ button:hover {
   transition: 0.3s;
   color: white;
 }
+
+.list-element {
+  margin-bottom: 1rem;
+}
+
+.list-element p {
+  padding: 7px;
+}
