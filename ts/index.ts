@@ -53,7 +53,7 @@ function calculate() {
         isNaN(r) || isNaN(n)) {
         alert('Du måste fylla i alla fält!')
         return;        
-    } else if (p < 50) {
+    } else if (p > 50) {
         alert('Repayment period must be under 50 years!')
         return;        
     }
