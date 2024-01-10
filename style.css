@@ -15,7 +15,7 @@ body {
 
   margin: 3rem auto;
   border-radius: 10px;
-  width: 50%;
+  width: 70%;
   background-color: lightblue;
 }
 
@@ -69,8 +69,21 @@ button:hover {
 
 .list-element {
   margin-bottom: 1rem;
+  display: flex;
+  /* flex-direction: column; */
+  gap: 15px;
+  padding: 10px;
 }
 
 .list-element p {
   padding: 7px;
+}
+.loan-amount,
+.interest-rate,
+.repayment,
+.monthly-payment,
+.total-remain {
+  border-radius: 5px;
+  text-align: center;
+  background-color: wheat;
 }

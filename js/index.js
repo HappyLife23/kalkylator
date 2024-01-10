@@ -18,9 +18,15 @@ repaymentPeriodInput.addEventListener('keydown', (e) => {
         repaymentPeriodInput.value = '';
     }
 });
+/**
+ * Skapar en funktion där jag gör:
+ * 1- mina matteberäkningar
+ * 2- string interpolation
+ * 3- if-saten om värdet på år är orimlig lång
+ */
 function calculate() {
     const p = parseInt(loanAmountInput.value);
-    const r = (parseInt(interestRateInput.value) / 1200).toFixed(5); // Begränsa till 5 decimaler
+    const r = (parseInt(interestRateInput.value) / 1200).toFixed(3); // Begränsa till 5 decimaler
     const n = parseInt(repaymentPeriodInput.value) * 12;
     const nominator = parseFloat(r) * (1 + parseFloat(r)) ** n; // Använd parseFloat för att konvertera till en flyttalsrepresentation
     const denominator = (1 + parseFloat(r)) ** n - 1;
@@ -29,11 +35,11 @@ function calculate() {
     const result = document.createElement('div');
     result.className = 'list-element';
     result.innerHTML = `
-        <p>Loan amount:${p} $</p>
-        <p>Interest rate: ${r}%</p>
-        <p>Repayment period:${n} month</p>
-        <p>Monthly payment: ${M} $</p>
-        <p>Total amount loan reamin: ${totalInterest} $</p>
+        <p class='loan-amount'>Loan amount:${p} $</p>
+        <p class='interest-rate'>Interest rate: ${r} %</p>
+        <p class='repayment'>Repayment period: ${n} month</p>
+        <p class='monthly-payment'>Monthly payment: ${M} $</p>
+        <p class='total-remain'>Total amount loan reamin: ${totalInterest} $</p>
 
     `;
     // kontrollerar att alla fält är ifyllda
@@ -42,8 +48,8 @@ function calculate() {
         alert('Du måste fylla i alla fält!');
         return;
     }
-    else if (p < 50) {
-        alert('Repayment period must be under 50 years!');
+    else if (n > 60) {
+        alert('Repayment period must be under 60 years!');
         return;
     }
     container.appendChild(result);
