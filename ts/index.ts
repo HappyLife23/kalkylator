@@ -30,26 +30,27 @@ repaymentPeriodInput.addEventListener('keydown', (e) => {
  */
 function calculate() {
     
-    const p:number = parseInt(loanAmountInput.value);
+    const p = parseInt(loanAmountInput.value);
     const r = (parseInt(interestRateInput.value) / 1200).toFixed(3); // Begränsa till 5 decimaler
-    const n:number = parseInt(repaymentPeriodInput.value) * 12;
+    const n = parseInt(repaymentPeriodInput.value) * 12;
     
      // kontrollerar att alla fält är ifyllda
      if (isNaN(p) ||
         isNaN(parseFloat(r)) || isNaN(n)) {
         alert('Du måste fylla i alla fält!')
         return;
-    }if (n > 60) {
-        alert('Repayment period cant be more than 60 years!')
-        return;        
     }
+    // if (n > 60) {
+    //     alert('Repayment period cant be more than 60 years!')
+    //     return;        
+    // }
 
     const nominator = parseFloat(r) * (1 + parseFloat(r)) ** n; // Använd parseFloat för att konvertera till en flyttalsrepresentation
     const denominator = (1 + parseFloat(r)) ** n - 1;
 
     let M = Math.round(p * (nominator / denominator))
      
-    const totalInterest = p - M;
+    const totalAmountLeft = p - M;
 
     
     const result = document.createElement('div')
@@ -59,9 +60,16 @@ function calculate() {
         <p class='interest-rate'>Interest rate: ${r} %</p>
         <p class='repayment'>Repayment period: ${n} month</p>
         <p class='monthly-payment'>Monthly payment: ${M} $</p>
-        <p class='total-remain'>Total amount loan reamin: ${totalInterest} $</p>
+        <p class='total-remain'>Total amount loan reamin: ${totalAmountLeft} $</p>
 
     `    
+
+    // const array1 = [nominator, denominator, M];
+
+    // array1.forEach((totalAmountLeft) => 
+    //     console.log(totalAmountLeft));
+
+
     container.appendChild(result);
 }
 
