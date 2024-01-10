@@ -30,10 +30,20 @@ repaymentPeriodInput.addEventListener('keydown', (e) => {
  */
 function calculate() {
     
-    const p = parseInt(loanAmountInput.value);
+    const p:number = parseInt(loanAmountInput.value);
     const r = (parseInt(interestRateInput.value) / 1200).toFixed(3); // Begränsa till 5 decimaler
-    const n = parseInt(repaymentPeriodInput.value) * 12;
+    const n:number = parseInt(repaymentPeriodInput.value) * 12;
     
+     // kontrollerar att alla fält är ifyllda
+     if (isNaN(p) ||
+        isNaN(parseFloat(r)) || isNaN(n)) {
+        alert('Du måste fylla i alla fält!')
+        return;
+    }if (n > 60) {
+        alert('Repayment period cant be more than 60 years!')
+        return;        
+    }
+
     const nominator = parseFloat(r) * (1 + parseFloat(r)) ** n; // Använd parseFloat för att konvertera till en flyttalsrepresentation
     const denominator = (1 + parseFloat(r)) ** n - 1;
 
@@ -41,6 +51,7 @@ function calculate() {
      
     const totalInterest = p - M;
 
+    
     const result = document.createElement('div')
     result.className = 'list-element'
     result.innerHTML = `
@@ -50,18 +61,7 @@ function calculate() {
         <p class='monthly-payment'>Monthly payment: ${M} $</p>
         <p class='total-remain'>Total amount loan reamin: ${totalInterest} $</p>
 
-    `  
-
-    // kontrollerar att alla fält är ifyllda
-    if (isNaN(p) ||
-        isNaN(parseFloat(r)) || isNaN(n)) {
-        alert('Du måste fylla i alla fält!')
-        return;        
-    }else if (n > 60) {
-        alert('Repayment period must be under 60 years!')
-        return;        
-    }
-    
+    `    
     container.appendChild(result);
 }
 

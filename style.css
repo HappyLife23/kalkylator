@@ -70,7 +70,7 @@ button:hover {
 .list-element {
   margin-bottom: 1rem;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   gap: 15px;
   padding: 10px;
 }
