@@ -87,3 +87,18 @@ button:hover {
   text-align: center;
   background-color: wheat;
 }
+
+tr {
+  display: flex;
+  gap: 20px;
+}
+th {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: rgb(147, 171, 106);
+}
+
+td {
+  padding: 0 3.5rem;
+  gap: 2rem;
+}

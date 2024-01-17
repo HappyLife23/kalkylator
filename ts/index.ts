@@ -22,54 +22,91 @@ repaymentPeriodInput.addEventListener('keydown', (e) => {
     }
 });
 
-/**
+/**------------------------------------------
  * Skapar en funktion där jag gör:
  * 1- mina matteberäkningar
  * 2- string interpolation 
  * 3- if-saten om värdet på år är orimlig lång
- */
+ -------------------------------------------*/
 function calculate() {
     
-    const p = parseInt(loanAmountInput.value);
-    const r = (parseInt(interestRateInput.value) / 1200).toFixed(3); // Begränsa till 5 decimaler
-    const n = parseInt(repaymentPeriodInput.value) * 12;
+    const loanAmount = parseFloat(loanAmountInput.value);
+    const interestRate = parseFloat(interestRateInput.value) / 1200; 
+    const repaymentPeriod = parseInt(repaymentPeriodInput.value) * 12;
     
-     // kontrollerar att alla fält är ifyllda
-     if (isNaN(p) ||
-        isNaN(parseFloat(r)) || isNaN(n)) {
+     /* kontrollerar att alla fält är ifyllda och 
+     om återbetalningsperioden stiger över 60 år (60 * 12 = 720 månader) */
+     if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(repaymentPeriod)) {
         alert('Du måste fylla i alla fält!')
         return;
+    }if (repaymentPeriod > 720) {
+        alert('Repayment period cant be more than 60 years!')
+        return;        
     }
-    // if (n > 60) {
-    //     alert('Repayment period cant be more than 60 years!')
-    //     return;        
-    // }
 
-    const nominator = parseFloat(r) * (1 + parseFloat(r)) ** n; // Använd parseFloat för att konvertera till en flyttalsrepresentation
-    const denominator = (1 + parseFloat(r)) ** n - 1;
+    // beräkning av nämnaren och täljaren
+    const nominator = interestRate * (1 + interestRate) ** repaymentPeriod; 
+    const denominator = (1 + interestRate) ** repaymentPeriod - 1;
 
-    let M = Math.round(p * (nominator / denominator))
+    // Beräkning av M(den månatliga inbetalningen)
+    let monthlyPayment = Math.round(loanAmount * (nominator / denominator))
      
-    const totalAmountLeft = p - M;
+    // Amorteringsplan
+    let remainingBalance = loanAmount;
+    const amortizationPlan = [];
+
+    for (let i = 1; i <= repaymentPeriod; i++){
+        const interestPayment = remainingBalance * interestRate; // räntebetalning = den aktuella summan * månadsinbetalningen
+
+        const principalPayment = monthlyPayment - interestPayment; // beräkning av amortering på huvudlånet 
+
+        remainingBalance -= principalPayment;
+         
+        amortizationPlan.push({
+            month: i,
+            principalPayment,
+            interestPayment,
+            remainingBalance,
+        })
+    };
 
     
     const result = document.createElement('div')
     result.className = 'list-element'
     result.innerHTML = `
-        <p class='loan-amount'>Loan amount:${p} $</p>
-        <p class='interest-rate'>Interest rate: ${r} %</p>
-        <p class='repayment'>Repayment period: ${n} month</p>
-        <p class='monthly-payment'>Monthly payment: ${M} $</p>
-        <p class='total-remain'>Total amount loan reamin: ${totalAmountLeft} $</p>
+        <p class='loan-amount'>Loan amount:${loanAmount} $</p>
+        <p class='interest-rate'>Interest rate: ${parseFloat((interestRate * 1200).toFixed(2))} %</p>
+        <p class='repayment'>Repayment period: ${repaymentPeriod} month</p>
+        <p class='monthly-payment'>Monthly payment: ${monthlyPayment} $</p>
+        
+        `;    
 
-    `    
+    // Visar amorteringsplan
+    const amortizationTable = document.createElement('table');
+    amortizationTable.innerHTML = `
+        <tr>
+            <th>Month</th>
+            <th>Principal Payment</th>
+            <th>Interest Payment</th>
+            <th>Ramining Balance</th>
+        
+        </tr>   
+    `;
 
-    // const array1 = [nominator, denominator, M];
+    amortizationPlan.forEach((payment) => {
+        amortizationTable.innerHTML += `
+         
+        <tr>
+            <td>${payment.month}</td>
+            <td>${payment.principalPayment.toFixed(0)}</td>
+            <td>${payment.interestPayment.toFixed(0)}</td>
+            <td>${payment.remainingBalance.toFixed(0)}</td>
+        </tr>
 
-    // array1.forEach((totalAmountLeft) => 
-    //     console.log(totalAmountLeft));
+        `;
+    });
 
-
+    result.appendChild(amortizationTable);
     container.appendChild(result);
 }
 
